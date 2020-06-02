@@ -29,47 +29,32 @@ $(document).ready(function () {
 
 
         $('.friend').click(function(){
-            var uid = $(this).attr('data-id');
+            var mid = $(this).attr('data-id');
             $.ajax({
                 type: "POST",
                 url: "https://localhost/php/simplechat/showdata.php",
                 dataType: "JSON",
-                data: {uid:uid},
+                data: {id:mid},
                 success: function (data) {
                     console.log(data);
                     var chatlist = '';
                     $.each(data.data,function(key,value){
-                        console.log(uid);
-                        var d = new Date(value.created_at);
-                        var soat = d.getHours() +':'+ d.getMinutes();
-                        var days = [
-                            'Sunday',
-                            'Monday',
-                            'Tuesday',
-                            'Wednesday',
-                            'Thursday',
-                            'Friday',
-                            'Saturday'
-                        ];
-                        x = d.getDay();
-
-                       if(value.created_at){
-                           chatlist += '<label>'+days[x]+' '+d.getDate()+'</label>';
-                       }else{
-                           chatlist += '';
-                       }
-                        if (value.who == uid){ //agar uid == uid
+                        if (value.suser_id == mid){
                             chatlist +='<div class="message right">';
-                        } else{
+                        } else if(value.suser_id){
                             chatlist +='<div class="message">';
                         }
+
+                      
+
                         chatlist += '<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/1_copy.jpg" />';
                         chatlist += '<div class="bubble">';
-                        chatlist += value.message;
+                        chatlist += value.text;
                         chatlist += '<div class="corner"></div>';
-                        chatlist += '<span>'+soat+'</span>';
+                        chatlist += '<span>'+value.created_at+'</span>';
                         chatlist += '</div></div>';
                     });
+                    console.log(chatlist);
                     $('#chat-messages').html(chatlist);
 
 
